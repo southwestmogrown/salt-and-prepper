@@ -20,9 +20,9 @@ const updateOneRecipe = (instructions) => ({
     }
 });
 
-const addOneRecipe = (recipe) => ({
+const addOneRecipe = (recipes) => ({
     type: ADD_RECIPE,
-    payload: recipe
+    recipes
 });
 
 export const thunkGetRecipes = (userId) => async (dispatch) => {
@@ -50,24 +50,23 @@ export const getRecipe = (userId, recipeId) => async (dispatch) => {
     }
 }
 
-export const addRecipe = (userId, name, type, instructions) => async (dispatch) => {
-    const res = await fetch(`/api/users/${userId}/recipes`, {
+export const thunkAddRecipe = ({user_id, name, recipe_type, instructions}) => async (dispatch) => {
+    const res = await fetch(`/api/users/${user_id}/recipes`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            userId,
+            user_id,
             name,
-            type,
+            recipe_type,
             instructions
         })
     });
 
     if(res.ok) {
         const data = await res.json();
-        dispatch(addOneRecipe(data));
-        return null;
+        dispatch(addOneRecipe(data.recipes));
     } else if (res.status < 500) {
         const data = await res.json();
         if (data.errors) {
@@ -126,6 +125,8 @@ export default function recipeReducer(state = initialState, action) {
     switch(action.type) {
         case SET_RECIPE:
             console.log(action.recipes)
+            return { ...state, allRecipes: [...action.recipes]}
+        case ADD_RECIPE:
             return { ...state, allRecipes: [...action.recipes]}
         case GET_RECIPE:
             return { ...state, oneRecipe: action.payload}

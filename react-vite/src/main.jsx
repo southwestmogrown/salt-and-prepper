@@ -7,6 +7,7 @@ import { router } from "./router";
 import * as sessionActions from "./redux/session";
 import "./index.css";
 import { Modal, ModalProvider } from "./context/Modal";
+import MenuProvider from "./context/MenuContext";
 
 const store = configureStore();
 
@@ -19,8 +20,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ReduxProvider store={store}>
       <ModalProvider >
-        <RouterProvider router={router} />
-        <Modal />
+        <MenuProvider>
+          <RouterProvider router={router} />
+          <Modal />
+        </MenuProvider>
       </ModalProvider>
     </ReduxProvider>
   </React.StrictMode>

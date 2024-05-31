@@ -1,14 +1,18 @@
-import { Box, AppBar, Toolbar, Container, Button } from "@mui/material"
+import { Box, AppBar, Toolbar, Container, Button, Typography } from "@mui/material"
+
 import { Image } from "mui-image"
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "./Navigation.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { thunkLogout } from "../../redux/session";
+import SideBar from "../Home/SideBar";
 
 
 function Navigation() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const sessionUser = useSelector(state => state.session.user);
 
   const onLogout = async () => {
     await dispatch(thunkLogout());
@@ -16,14 +20,17 @@ function Navigation() {
   }
 
   return (
-    <Box sx={{flexGrow: 1}}>
+    <Box sx={{display: "flex"}}>
       <AppBar
-        position="static"
+        position="fixed"
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1
+        }}
       >
         <Toolbar
           sx={{
             bgcolor: 'grey.800',
-            boxShadow: 4
+            boxShadow: 1
           }}
         >
           <Container sx={{ display: "flex", justifyContent: "center", padding: "10px"}} >
@@ -34,6 +41,9 @@ function Navigation() {
                 height="100px"
               />
             </NavLink>
+          </Container>
+          <Container sx={{ display: "flex", justifyContent: "center", padding: "10px"}} >
+            <Typography variant="h4">Greetings, {sessionUser?.username}</Typography>
           </Container>
           <Container sx={{ display: "flex", justifyContent: "center", padding: "10px"}}>
             <Button 
@@ -46,6 +56,7 @@ function Navigation() {
           </Container>
         </Toolbar>
       </AppBar>
+      <SideBar />
       <Outlet />
     </Box>
   );
