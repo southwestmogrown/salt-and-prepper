@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import { useModal } from '../../context/Modal';
 
 function OpenModalButton({
@@ -14,7 +15,7 @@ function OpenModalButton({
     if (typeof onButtonClick === "function") onButtonClick();
   };
 
-  return <button onClick={onClick}>{buttonText}</button>;
+  return <Button onClick={onClick}>{buttonText}</Button>;
 }
 
 export default OpenModalButton;

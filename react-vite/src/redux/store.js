@@ -6,9 +6,17 @@ import {
 } from "redux";
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
+import recipeReducer from './recipe';
+import ingredientReducer from './ingredient';
+import mealplanReducer from './mealplan';
+import mealplanRecipeReducer from './mealplan_recipe';
 
 const rootReducer = combineReducers({
   session: sessionReducer,
+  recipes: recipeReducer,
+  ingredients: ingredientReducer,
+  mealplans: mealplanReducer,
+  mealplanRecipes: mealplanRecipeReducer
 });
 
 let enhancer;
