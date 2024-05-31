@@ -11,6 +11,7 @@ class Recipe(db.Model):
     name = db.Column(db.String(255), nullable=False)
     recipe_type = db.Column(db.String(10))
     instructions = db.Column(db.Text, nullable=False)
+    description = db.Column(db.String(500), nullable=False)
     
     user = db.relationship('User', back_populates='recipes')
     ingredients = db.relationship('Ingredient', back_populates='recipe',  cascade="all, delete-orphan")
@@ -23,5 +24,7 @@ class Recipe(db.Model):
             'userId': self.user_id,
             'name': self.name,
             'recipe_type': self.recipe_type,
-            'instructions': self.instructions
+            'instructions': self.instructions,
+            'ingredients': [ingredient.to_dict() for ingredient in self.ingredients],
+            'description': self.description
         }

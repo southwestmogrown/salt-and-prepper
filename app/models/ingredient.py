@@ -17,7 +17,7 @@ class Ingredient(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'recipeId': self.recipeId,
+            'recipeId': self.recipe_id,
             'name': self.name,
             'ingredientType': self.ingredient_type,
             'measurement': self.measurement

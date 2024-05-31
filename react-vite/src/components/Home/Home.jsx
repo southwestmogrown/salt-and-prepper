@@ -11,11 +11,13 @@ import { thunkGetRecipes } from "../../redux/recipe";
 function Home() {
   const dispatch = useDispatch()
   const sessionUser = useSelector(state => state.session.user);
-  const recipes = useSelector(state => state.recipes.allRecipes)
-  console.log(recipes)
+  const flatRecipes = useSelector(state => state.recipes);
+  const recipes = Object.values(flatRecipes)
 
   useEffect(() => {
-    dispatch(thunkGetRecipes(sessionUser.id))
+    if (sessionUser) {
+      dispatch(thunkGetRecipes(sessionUser.id))
+    }
   }, [dispatch, sessionUser])
 
   return (
@@ -32,10 +34,9 @@ function Home() {
             <Box>
               <h1>Recipes</h1>
               {recipes.map(recipe => (
-                <>
-                
-                <h1>{recipe.name}</h1>
-                </>
+                <div key={recipe.name}>
+                  <h1>{recipe.name}</h1>
+                </div>
               ))}
             </Box>
           </Box>

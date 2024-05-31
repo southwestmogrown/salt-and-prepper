@@ -13,6 +13,7 @@ function AddRecipeForm() {
   const [open, setOpen] = useState(false)
   const [recipeType, setRecipeType] = useState('--Select A Type--');
   const [instructions, setInstructions] = useState('')
+  const [description, setDescription] = useState('')
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -42,7 +43,8 @@ function AddRecipeForm() {
       user_id: sessionUser.id,
       name,
       recipe_type: recipeType,
-      instructions
+      instructions,
+      description
     }
     const errors = await dispatch(thunkAddRecipe(recipeObj))
 
@@ -87,6 +89,13 @@ function AddRecipeForm() {
           <MenuItem key={text} value={text}>{text}</MenuItem>
         ))}
         </Select>
+        <TextField
+          id="description"
+          multiline
+          value={description}
+          placeholder="Describe your dish!"
+          onChange={(e) => setDescription(e.target.value)}
+        />
         <TextField
           id="instructions"
           multiline

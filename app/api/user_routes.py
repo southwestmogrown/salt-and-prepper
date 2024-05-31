@@ -51,9 +51,8 @@ def add_recipe(id):
 
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        new_recipe = Recipe(user_id=data['user_id'], name=data['name'], recipe_type=data['recipe_type'], instructions=data['instructions'])
+        new_recipe = Recipe(user_id=data['user_id'], name=data['name'], recipe_type=data['recipe_type'], instructions=data['instructions'], description=data['description'])
         db.session.add(new_recipe)
         db.session.commit()
-        recipes =  Recipe.query.where(id == Recipe.user_id).all()
-        return {'recipes': [recipe.to_dict() for recipe in recipes]}
+        return new_recipe.to_dict()
     return {'errors': validation_errors_to_error_messages(form.errors)}, 401
