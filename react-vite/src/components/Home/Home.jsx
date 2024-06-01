@@ -1,19 +1,23 @@
-import { Box, Grid, Typography } from "@mui/material";
+import {  Box} from "@mui/material";
+
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { Navigate } from "react-router-dom";
 import { thunkGetRecipes } from "../../redux/recipe";
-import RecipeCard from "../RecipeCard";
+// import RecipeCard from "../RecipeCard";
+
+
 
 function Home() {
   const dispatch = useDispatch()
   const sessionUser = useSelector(state => state.session.user);
-  const recipes = useSelector(state => state.recipes.allRecipes)
-  console.log(recipes)
+  const flatRecipes = useSelector(state => state.recipes);
+  const recipes = Object.values(flatRecipes)
 
   useEffect(() => {
-    dispatch(thunkGetRecipes(sessionUser.id))
-  }, [dispatch, sessionUser])
+      
+      dispatch(thunkGetRecipes(sessionUser.id))
+  }, [dispatch])
 
   return (
           sessionUser
@@ -25,14 +29,13 @@ function Home() {
             display: "flex",
             justifyContent: "center"
           }}>
-            <Typography variant="h1">Hello {sessionUser.username}</Typography>
+
             <Box>
               <h1>Recipes</h1>
               {recipes.map(recipe => (
-                <>
-                
-                <h1>{recipe.name}</h1>
-                </>
+                <div key={recipe.name}>
+                  <h1>{recipe.name}</h1>
+                </div>
               ))}
             </Box>
           </Box>
