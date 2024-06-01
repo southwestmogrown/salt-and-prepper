@@ -15,9 +15,8 @@ function Home() {
   const recipes = Object.values(flatRecipes)
 
   useEffect(() => {
-      
       dispatch(thunkGetRecipes(sessionUser.id))
-  }, [dispatch])
+  }, [dispatch, sessionUser.id])
 
   return (
           sessionUser

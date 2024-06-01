@@ -9,10 +9,10 @@ function AddRecipeForm({recipe}) {
   const dispatch = useDispatch()
   const sessionUser = useSelector(state => state.session.user);
   const { closeModal } = useModal()
-  const [name, setName] = useState(recipe.name || '');
-  const [recipeType, setRecipeType] = useState(recipe.recipe_type || '');
-  const [instructions, setInstructions] = useState(recipe.instructions || '')
-  const [description, setDescription] = useState(recipe.description || '')
+  const [name, setName] = useState(recipe?.name || '');
+  const [recipeType, setRecipeType] = useState(recipe?.recipe_type || '');
+  const [instructions, setInstructions] = useState(recipe?.instructions || '')
+  const [description, setDescription] = useState(recipe?.description || '')
   const [open, setOpen] = useState(false)
 
   const handleClose = (event, reason) => {
