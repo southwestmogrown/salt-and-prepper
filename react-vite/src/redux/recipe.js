@@ -13,12 +13,6 @@ const getOneRecipe = (recipe) => ({
     payload: recipe
 });
 
-const updateOneRecipe = (instructions) => ({
-    type: UPDATE_RECIPE,
-    payload: {
-        instructions
-    }
-});
 
 const addRecipe = (recipe) => ({
     type: ADD_RECIPE,
