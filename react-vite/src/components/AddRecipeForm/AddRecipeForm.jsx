@@ -15,7 +15,8 @@ function AddRecipeForm({recipe}) {
   const [description, setDescription] = useState(recipe?.description || '')
   const [open, setOpen] = useState(false)
 
-  const handleClose = (event, reason) => {
+
+  const handleClose = (reason) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -50,10 +51,9 @@ function AddRecipeForm({recipe}) {
     if (recipe) {
       recipeObj.id = recipe.id
     }
-
+    console.log(recipeObj)
 
     const errors = recipe ? await dispatch(thunkUpdateRecipe(recipeObj)) : await dispatch(thunkAddRecipe(recipeObj))
-
     if (!errors) {
       setOpen(true)
       closeModal()
