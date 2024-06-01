@@ -1,3 +1,4 @@
+import { ListItemText } from '@mui/material';
 import { useModal } from '../../context/Modal';
 
 function OpenModalMenuItem({
@@ -15,7 +16,7 @@ function OpenModalMenuItem({
   };
 
   return (
-    <li onClick={onClick}>{itemText}</li>
+    <ListItemText primary={itemText} onClick={onClick}/>
   );
 }
 

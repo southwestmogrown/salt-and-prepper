@@ -6,5 +6,5 @@ class IngredientForm(FlaskForm):
     userId = IntegerField('userId')
     recipeId = IntegerField('recipeId')
     name = StringField('name', validators=[DataRequired(), Length(max=100)])
-    type = StringField('type', validators=[DataRequired(), Length(max=20)])
+    ingredient_type = StringField('ingredient_type', validators=[DataRequired(), Length(max=20)])
     amount = StringField('amount', validators=[DataRequired(), Length(max=20)])

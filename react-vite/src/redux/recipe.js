@@ -1,10 +1,10 @@
-const SET_RECIPE = 'recipe/SET_RECIPE';
+const LOAD_RECIPES = 'recipe/LOAD_RECIPES';
 const GET_RECIPE = 'recipe/GET_RECIPE';
 const UPDATE_RECIPE = 'recipe/UPDATE_RECIPE';
 const ADD_RECIPE = 'recipe/ADD_RECIPE';
 
-const setRecipes = (recipes) => ({
-    type: SET_RECIPE,
+const loadRecipes = (recipes) => ({
+    type: LOAD_RECIPES,
     recipes
 });
 
@@ -20,9 +20,9 @@ const updateOneRecipe = (instructions) => ({
     }
 });
 
-const addOneRecipe = (recipe) => ({
+const addRecipe = (recipe) => ({
     type: ADD_RECIPE,
-    payload: recipe
+    recipe
 });
 
 export const thunkGetRecipes = (userId) => async (dispatch) => {
@@ -33,12 +33,15 @@ export const thunkGetRecipes = (userId) => async (dispatch) => {
         if(data.errors) {
             return data.errors
         }
-        dispatch(setRecipes(data))
-        return data
+        const payload = {}
+        data.forEach(recipe => {
+            payload[recipe.id] = recipe
+        })
+        dispatch(loadRecipes(payload))
     }
 };
 
-export const getRecipe = (userId, recipeId) => async (dispatch) => {
+export const thunkGetRecipe = (userId, recipeId) => async (dispatch) => {
     const res = await fetch(`/api/users/${userId}/recipes/${recipeId}`)
 
     if(res.ok) {
@@ -50,24 +53,24 @@ export const getRecipe = (userId, recipeId) => async (dispatch) => {
     }
 }
 
-export const addRecipe = (userId, name, type, instructions) => async (dispatch) => {
-    const res = await fetch(`/api/users/${userId}/recipes`, {
+export const thunkAddRecipe = ({user_id, name, recipe_type, instructions, description}) => async (dispatch) => {
+    const res = await fetch(`/api/users/${user_id}/recipes`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            userId,
+            user_id,
             name,
-            type,
-            instructions
+            recipe_type,
+            instructions,
+            description
         })
     });
 
     if(res.ok) {
         const data = await res.json();
-        dispatch(addOneRecipe(data));
-        return null;
+        dispatch(addRecipe(data));
     } else if (res.status < 500) {
         const data = await res.json();
         if (data.errors) {
@@ -78,23 +81,28 @@ export const addRecipe = (userId, name, type, instructions) => async (dispatch) 
       }
 } 
 
-export const updateRecipe = (userId, recipeId, instructions) => async (dispatch) => {
-    const res = await fetch(`/api/users/${userId}/recipes/${recipeId}`, {
-        method: 'PATCH',
+export const thunkUpdateRecipe = ({userId, id, name, recipe_type, description, instructions}) => async (dispatch) => {
+    const res = await fetch(`/api/users/${userId}/recipes/${id}`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            instructions: instructions
+            id,
+            name,
+            recipe_type,
+            description,
+            instructions
         })
     });
     
     if (res.ok) {
         const data = await res.json();
-        dispatch(updateOneRecipe(data.instructions))
+        dispatch(addRecipe(data))
     } else if (res.status < 500) {
         const data = await res.json();
         if (data.errors) {
+          console.log(data.errors)
           return data.errors;
         }
       } else {
@@ -102,7 +110,7 @@ export const updateRecipe = (userId, recipeId, instructions) => async (dispatch)
       }
 }
 
-export const deleteRecipe = (userId, recipeId) => async (dispatch) => {
+export const thunkDeleteRecipe = (userId, recipeId) => async (dispatch) => {
     const res = await fetch(`/api/users/${userId}/recipes/${recipeId}`, {
         method: 'DELETE'
     })
@@ -113,20 +121,25 @@ export const deleteRecipe = (userId, recipeId) => async (dispatch) => {
         if(data.errors) {
             return data.errors
         }
+        const recipes = {}
 
-        dispatch(setRecipes(data))
+        data.forEach(recipe => {
+            recipes[recipe.id] = recipe
+        })
+        dispatch(loadRecipes(recipes))
     }
 
 
 }
 
-const initialState = {allRecipes: [], oneRecipe: null}
+const initialState = {}
 
 export default function recipeReducer(state = initialState, action) {
     switch(action.type) {
-        case SET_RECIPE:
-            console.log(action.recipes)
-            return { ...state, allRecipes: [...action.recipes]}
+        case LOAD_RECIPES:
+            return { ...action.recipes }
+        case ADD_RECIPE:
+            return { ...state, [action.recipe.id]: action.recipe }
         case GET_RECIPE:
             return { ...state, oneRecipe: action.payload}
         case UPDATE_RECIPE:
