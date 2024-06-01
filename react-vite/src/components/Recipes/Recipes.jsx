@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import MenuRecipeCard from "./MenuRecipeCard";
 
 
-function Recipes() {
+function Recipes({setOpen}) {
   const flatRecipes = useSelector(state => state.recipes);
   const recipes = Object.values(flatRecipes)
 
@@ -12,7 +12,7 @@ function Recipes() {
       <List>
         {recipes.map(recipe => (
             <ListItem key={recipe.id}>
-              <MenuRecipeCard recipe={recipe}/>
+              <MenuRecipeCard setOpen={setOpen} recipe={recipe}/>
             </ListItem>
         ))}
       </List>

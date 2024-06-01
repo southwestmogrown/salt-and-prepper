@@ -4,22 +4,29 @@ import { Image } from "mui-image"
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "./Navigation.css";
 import { useDispatch, useSelector } from "react-redux";
-import { thunkLogout } from "../../redux/session";
+import { thunkAuthenticate, thunkLogout } from "../../redux/session";
 import SideBar from "../Home/SideBar";
+import { useEffect } from "react";
 
 
 function Navigation() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const sessionUser = useSelector(state => state.session.user)
 
-  const sessionUser = useSelector(state => state.session.user);
+  const recipes = useSelector(state => state.recipes);
+  const recipe_count = Object.values(recipes).length; 
+
+  useEffect(() => {
+    dispatch(thunkAuthenticate())
+  }, [dispatch])
 
   const onLogout = async () => {
     await dispatch(thunkLogout());
     navigate('/')
   }
 
-  return (
+  return ( 
     <Box sx={{display: "flex"}}>
       <AppBar
         position="fixed"
@@ -44,6 +51,7 @@ function Navigation() {
           </Container>
           <Container sx={{ display: "flex", justifyContent: "center", padding: "10px"}} >
             <Typography variant="h4">Greetings, {sessionUser?.username}</Typography>
+            <Typography variant="h6">You have {recipe_count} recipes saved.</Typography>
           </Container>
           <Container sx={{ display: "flex", justifyContent: "center", padding: "10px"}}>
             <Button 

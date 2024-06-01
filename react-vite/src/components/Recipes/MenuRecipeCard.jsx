@@ -2,7 +2,7 @@ import { Avatar, Card, CardContent, CardHeader, Typography } from "@mui/material
 import { red } from '@mui/material/colors';
 import { NavLink } from "react-router-dom";
 
-function MenuRecipeCard({ recipe }) {
+function MenuRecipeCard({ setOpen, recipe }) {
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -13,7 +13,7 @@ function MenuRecipeCard({ recipe }) {
           </Avatar>
         }
         title={
-          <NavLink to={`/recipes/${recipe.id}`}>
+          <NavLink onClick={() => setOpen(false)} to={`/recipes/${recipe.id}`}>
             {recipe.name}
           </NavLink>
         }

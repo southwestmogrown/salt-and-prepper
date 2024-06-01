@@ -20,7 +20,7 @@ const updateOneRecipe = (instructions) => ({
     }
 });
 
-const addOneRecipe = (recipe) => ({
+const addRecipe = (recipe) => ({
     type: ADD_RECIPE,
     recipe
 });
@@ -70,7 +70,7 @@ export const thunkAddRecipe = ({user_id, name, recipe_type, instructions, descri
 
     if(res.ok) {
         const data = await res.json();
-        dispatch(addOneRecipe(data));
+        dispatch(addRecipe(data));
     } else if (res.status < 500) {
         const data = await res.json();
         if (data.errors) {
@@ -81,23 +81,28 @@ export const thunkAddRecipe = ({user_id, name, recipe_type, instructions, descri
       }
 } 
 
-export const updateRecipe = (userId, recipeId, instructions) => async (dispatch) => {
-    const res = await fetch(`/api/users/${userId}/recipes/${recipeId}`, {
-        method: 'PATCH',
+export const thunkUpdateRecipe = ({userId, id, name, recipe_type, description, instructions}) => async (dispatch) => {
+    const res = await fetch(`/api/users/${userId}/recipes/${id}`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            instructions: instructions
+            id,
+            name,
+            recipe_type,
+            description,
+            instructions
         })
     });
     
     if (res.ok) {
         const data = await res.json();
-        dispatch(updateOneRecipe(data.instructions))
+        dispatch(addRecipe(data))
     } else if (res.status < 500) {
         const data = await res.json();
         if (data.errors) {
+          console.log(data.errors)
           return data.errors;
         }
       } else {
@@ -105,7 +110,7 @@ export const updateRecipe = (userId, recipeId, instructions) => async (dispatch)
       }
 }
 
-export const deleteRecipe = (userId, recipeId) => async (dispatch) => {
+export const thunkDeleteRecipe = (userId, recipeId) => async (dispatch) => {
     const res = await fetch(`/api/users/${userId}/recipes/${recipeId}`, {
         method: 'DELETE'
     })
@@ -116,8 +121,12 @@ export const deleteRecipe = (userId, recipeId) => async (dispatch) => {
         if(data.errors) {
             return data.errors
         }
+        const recipes = {}
 
-        dispatch(loadRecipes(data))
+        data.forEach(recipe => {
+            recipes[recipe.id] = recipe
+        })
+        dispatch(loadRecipes(recipes))
     }
 
 

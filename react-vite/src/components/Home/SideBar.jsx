@@ -1,37 +1,39 @@
 import { Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Popover } from "@mui/material";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import AddCircleOutlineOutlinedIcon  from '@mui/icons-material/AddCircleOutlineOutlined';
 import { useMenuContext } from "../../context/MenuContext";
 import { useState } from "react";
 import Recipes from "../Recipes/Recipes";
-import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
-import AddRecipeForm from "../AddRecipeForm";
+
+import AddButton from "./AddButton";
 
 const drawerWidth = 240;
 
 function SideBar() {
   const [anchor, setAnchor] = useState(null)
+  const [open, setOpen] = useState(null)
   const { showRecipes, setShowRecipes } = useMenuContext()
 
   const handleClick = (e, text) => {
+    setOpen(true)
     switch (text) {
       case "Recipes": {
         setShowRecipes(true);
         break;
       }
       default:
+
         break;
     }
     setAnchor(e.currentTarget);
   };
 
   const handleClose = () => {
-    setShowRecipes(false)
+    setShowRecipes(false);
+    setOpen(null)
     setAnchor(null);
   };
 
-  const open = Boolean(anchor);
   const id = open ? 'simple-popover' : undefined;
 
   return (
@@ -64,34 +66,31 @@ function SideBar() {
                   </ListItemIcon>
                   <ListItemText  primary={text} />
                 </ListItemButton>
-                <Popover
-                  id={id}
-                  open={open}
-                  anchorEl={anchor}
-                  onClose={handleClose}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                  }}
-                >
-                  {showRecipes && <Recipes />}
-                </Popover>
+                {open && 
+                  <Popover
+                    
+                    id={open ? 'simple-popover' : undefined}
+                    open={open}
+                    anchorEl={anchor}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right',
+                    }}
+                  >
+                    {showRecipes && <Recipes setOpen={setOpen} />}
+                  </Popover>
+                
+                }
               </ListItem>
             ))}
           </List>
           <Divider />
           <List>
-            {['Add A Recipe', 'Add A Meal Plan', 'Add To Pantry', 'Add To Shopping List'].map((text) => (
-              
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon >
-                    <AddCircleOutlineOutlinedIcon />
-                  </ListItemIcon>
-                  <OpenModalMenuItem itemText={text} modalComponent={<AddRecipeForm />} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+            <AddButton text="Add A Recipe"/>
+            <AddButton text="Add A Meal Plan" />
+            <AddButton text="Add To Pantry" />
+            <AddButton text="Add To Shopping List" />
           </List>
         </Box>
       </Drawer>

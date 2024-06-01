@@ -2,18 +2,18 @@ import { Box, FormLabel, Select, TextField, MenuItem, Button, IconButton, Snackb
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close'
-import { thunkAddRecipe } from "../../redux/recipe";
+import { thunkAddRecipe, thunkUpdateRecipe } from "../../redux/recipe";
 import { useModal } from "../../context/Modal";
 
-function AddRecipeForm() {
+function AddRecipeForm({recipe}) {
   const dispatch = useDispatch()
   const sessionUser = useSelector(state => state.session.user);
   const { closeModal } = useModal()
-  const [name, setName] = useState('');
+  const [name, setName] = useState(recipe.name || '');
+  const [recipeType, setRecipeType] = useState(recipe.recipe_type || '');
+  const [instructions, setInstructions] = useState(recipe.instructions || '')
+  const [description, setDescription] = useState(recipe.description || '')
   const [open, setOpen] = useState(false)
-  const [recipeType, setRecipeType] = useState('--Select A Type--');
-  const [instructions, setInstructions] = useState('')
-  const [description, setDescription] = useState('')
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -40,13 +40,19 @@ function AddRecipeForm() {
     e.preventDefault()
 
     const recipeObj = {
-      user_id: sessionUser.id,
+      userId: sessionUser.id,
       name,
       recipe_type: recipeType,
       instructions,
       description
     }
-    const errors = await dispatch(thunkAddRecipe(recipeObj))
+
+    if (recipe) {
+      recipeObj.id = recipe.id
+    }
+
+
+    const errors = recipe ? await dispatch(thunkUpdateRecipe(recipeObj)) : await dispatch(thunkAddRecipe(recipeObj))
 
     if (!errors) {
       setOpen(true)
@@ -73,13 +79,6 @@ function AddRecipeForm() {
           What type of recipe is this?
         </FormLabel>
         <Select
-          renderValue={() => 
-            recipeType === '--Select A Type--'
-            ?
-            <MenuItem disabled value="--Select A Type--">--Select A Type--</MenuItem>
-            :
-            recipeType
-          }
           value={recipeType}
           id="recipe-type"
           onChange={(e) => setRecipeType(e.target.value)}
@@ -103,7 +102,7 @@ function AddRecipeForm() {
           placeholder="How do you prepare this recipe?"
           onChange={(e) => setInstructions(e.target.value)}
         />
-        <Button type="submit" variant="outlined">Add Recipe</Button>
+        <Button type="submit" variant="outlined">{recipe ? "Update Recipe" : "Add Recipe"}</Button>
         <Snackbar 
           open={open}
           autoHideDuration={5000}
