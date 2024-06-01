@@ -16,7 +16,7 @@ function Home() {
 
   useEffect(() => {
       dispatch(thunkGetRecipes(sessionUser.id))
-  }, [dispatch, sessionUser.id])
+  }, [dispatch, sessionUser])
 
   return (
           sessionUser

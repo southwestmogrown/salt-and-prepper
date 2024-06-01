@@ -47,14 +47,14 @@ export const thunkGetRecipe = (userId, recipeId) => async (dispatch) => {
     }
 }
 
-export const thunkAddRecipe = ({user_id, name, recipe_type, instructions, description}) => async (dispatch) => {
-    const res = await fetch(`/api/users/${user_id}/recipes`, {
+export const thunkAddRecipe = ({userId, name, recipe_type, instructions, description}) => async (dispatch) => {
+    const res = await fetch(`/api/users/${userId}/recipes`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            user_id,
+            user_id: userId,
             name,
             recipe_type,
             instructions,
