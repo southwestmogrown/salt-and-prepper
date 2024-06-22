@@ -33,7 +33,9 @@ function MealplanDetails() {
           height: "100vh",
         }}
       >
-        <Typography variant="h1">{mealplan?.name}</Typography>
+        <Typography variant="h1">
+          {new Date(mealplan.date).toDateString()}: {mealplan?.name}
+        </Typography>
         <Container
           sx={{
             display: "flex",

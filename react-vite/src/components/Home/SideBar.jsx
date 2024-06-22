@@ -45,11 +45,14 @@ function SideBar() {
     setAnchor(e.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleRecipeClose = () => {
     setShowRecipes(false);
+    setOpenRecipes(false);
+    setAnchor(null);
+  };
+  const handleMealplanClose = () => {
     setShowMealplans(false);
-    setOpenRecipes(null);
-    setOpenMealplans(null);
+    setOpenMealplans(false);
     setAnchor(null);
   };
 
@@ -93,20 +96,31 @@ function SideBar() {
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
-              {(openRecipes || openMealplans) && (
+              {openRecipes && (
                 <Popover
-                  id={
-                    openRecipes || openMealplans ? "simple-popover" : undefined
-                  }
-                  open={openRecipes || openMealplans}
+                  id={openRecipes ? "simple-popover" : undefined}
+                  open={openRecipes}
                   anchorEl={anchor}
-                  onClose={handleClose}
+                  onClose={handleRecipeClose}
                   anchorOrigin={{
                     vertical: "bottom",
                     horizontal: "right",
                   }}
                 >
                   {showRecipes && <Recipes setOpen={setOpenRecipes} />}
+                </Popover>
+              )}
+              {openMealplans && (
+                <Popover
+                  id={openMealplans ? "simple-popover" : undefined}
+                  open={openMealplans}
+                  anchorEl={anchor}
+                  onClose={handleMealplanClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                >
                   {showMealplans && <Mealplans setOpen={setOpenMealplans} />}
                 </Popover>
               )}

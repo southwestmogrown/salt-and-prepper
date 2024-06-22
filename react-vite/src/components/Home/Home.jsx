@@ -26,11 +26,7 @@ function Home() {
     setMpDate(value);
 
     for (let plan of userMealplans) {
-      const dateArr = plan.date.split(" ");
-      const dateStr = `${dateArr[3]}/${dateArr[2]}/${dateArr[1]}`;
-      const date = new Date(dateStr);
-
-      if (value.$d.toDateString() === date.toDateString()) {
+      if (value.$d.toDateString() === plan.date.toDateString()) {
         setModalContent(<Mealplan plan={plan} />);
         return;
       }

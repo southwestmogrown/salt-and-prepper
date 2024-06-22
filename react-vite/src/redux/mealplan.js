@@ -17,6 +17,13 @@ const addOneMealplan = (mealplan) => ({
   payload: mealplan,
 });
 
+const formatDate = (plan) => {
+  const dateArr = plan.date.split(" ");
+  const dateStr = `${dateArr[3]}/${dateArr[2]}/${dateArr[1]}`;
+  const newDate = new Date(dateStr);
+  return newDate;
+};
+
 export const thunkLoadMealplans = () => async (dispatch) => {
   const res = await fetch(`/api/users/mealplans`);
 
@@ -26,7 +33,12 @@ export const thunkLoadMealplans = () => async (dispatch) => {
     if (data.errors) {
       return data.errors;
     }
-    dispatch(loadMealplans(data));
+    const fixDates = data.map((plan) => {
+      plan.date = formatDate(plan);
+      return plan;
+    });
+    console.log(fixDates);
+    dispatch(loadMealplans(fixDates));
   }
 };
 
@@ -56,6 +68,7 @@ export const thunkAddMealplan = (name, date) => async (dispatch) => {
 
   if (res.ok) {
     const data = await res.json();
+    data.date = formatDate(data);
     dispatch(addOneMealplan(data));
   } else if (res.status < 500) {
     const data = await res.json();
