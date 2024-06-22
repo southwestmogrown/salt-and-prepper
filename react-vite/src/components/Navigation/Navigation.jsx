@@ -49,7 +49,7 @@ function Navigation() {
               />
             </NavLink>
           </Container>
-          <Container sx={{ display: "flex", justifyContent: "center", padding: "10px"}} >
+          <Container sx={{ display: "flex", justifyContent: "space-around", alignItems: "center", padding: "10px"}} >
             <Typography variant="h4">Greetings, {sessionUser?.username}</Typography>
             <Typography variant="h6">You have {recipe_count} recipes saved.</Typography>
           </Container>

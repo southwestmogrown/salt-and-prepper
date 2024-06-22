@@ -1,9 +1,14 @@
-import { Avatar, Card, CardContent, CardHeader, Typography } from "@mui/material";
-import { red } from '@mui/material/colors';
+import {
+  Avatar,
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+} from "@mui/material";
+import { red } from "@mui/material/colors";
 import { NavLink } from "react-router-dom";
 
 function MenuRecipeCard({ setOpen, recipe }) {
-
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
@@ -20,14 +25,11 @@ function MenuRecipeCard({ setOpen, recipe }) {
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the mussels,
-          if you like.
+          {recipe.description}
         </Typography>
       </CardContent>
-     
     </Card>
-  )
+  );
 }
 
-export default MenuRecipeCard
+export default MenuRecipeCard;

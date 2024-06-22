@@ -1,8 +1,9 @@
-import { createBrowserRouter } from 'react-router-dom';
-import Landing from '../components/Landing';
-import Home from '../components/Home';
-import Navigation from '../components/Navigation';
-import { RecipeDetails } from '../components/Recipes';
+import { createBrowserRouter } from "react-router-dom";
+import Landing from "../components/Landing";
+import Home from "../components/Home";
+import Navigation from "../components/Navigation";
+import { RecipeDetails } from "../components/Recipes";
+import { MealplanDetails } from "../components/Mealplan";
 
 export const router = createBrowserRouter([
   {
@@ -18,8 +19,12 @@ export const router = createBrowserRouter([
       },
       {
         path: "recipes/:id",
-        element: <RecipeDetails />
-      }
+        element: <RecipeDetails />,
+      },
+      {
+        path: "mealplans/:id",
+        element: <MealplanDetails />,
+      },
     ],
   },
 ]);

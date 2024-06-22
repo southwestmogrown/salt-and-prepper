@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from flask_login import login_required, current_user
-from app.models import User, Recipe, db
+from app.models import User, Recipe, db, Mealplan
 from app.forms import RecipeForm
 
 user_routes = Blueprint('users', __name__)
@@ -16,7 +16,7 @@ def validation_errors_to_error_messages(validation_errors):
     return errorMessages
 
 
-@user_routes.route('/')
+@user_routes.route('')
 @login_required
 def users():
     """
@@ -42,47 +42,8 @@ def recipes(id):
     recipes = Recipe.query.where(Recipe.user_id == id).all()
     return [recipe.to_dict() for recipe in recipes]
 
-
-@user_routes.route('/<int:id>/recipes', methods=['POST'])
+@user_routes.route('/mealplans')
 @login_required
-def add_recipe(id):
-    data = request.get_json()
-    print(data)
-    form = RecipeForm()
-
-    form['csrf_token'].data = request.cookies['csrf_token']
-    if form.validate_on_submit():
-        new_recipe = Recipe(user_id=data['user_id'], name=data['name'], recipe_type=data['recipe_type'], instructions=data['instructions'], description=data['description'])
-        db.session.add(new_recipe)
-        db.session.commit()
-        return new_recipe.to_dict()
-    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
-
-
-@user_routes.route('/<int:userId>/recipes/<int:recipeId>', methods=['DELETE'])
-@login_required
-def delete_recipe(userId, recipeId):
-    recipe = Recipe.query.get(recipeId)
-    db.session.delete(recipe)
-    db.session.commit()
-    recipes = Recipe.query.where(Recipe.user_id == userId).all()
-    return [recipe.to_dict() for recipe in recipes]
-
-
-@user_routes.route('/<int:id>/recipes/<int:recipeId>', methods=['POST'])
-@login_required
-def edit_recipe(id, recipeId):
-    form = RecipeForm()
-
-    form['csrf_token'].data = request.cookies['csrf_token']
-    if form.validate_on_submit():
-        recipe = Recipe.query.get(recipeId)
-        recipe.name = form.data['name']
-        recipe.recipe_type = form.data['recipe_type']
-        recipe.description = form.data['description']
-        recipe.instructions = form.data['instructions']
-        db.session.commit()
-
-
-        return recipe.to_dict()
-    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
+def mealplans():
+    mealplans = current_user.user_mealplans
+    return [mealplan.to_dict() for mealplan in mealplans]
