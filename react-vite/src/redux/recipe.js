@@ -48,7 +48,7 @@ export const thunkGetRecipe = (userId, recipeId) => async (dispatch) => {
 }
 
 export const thunkAddRecipe = ({userId, name, recipe_type, instructions, description}) => async (dispatch) => {
-    const res = await fetch(`/api/users/${userId}/recipes`, {
+    const res = await fetch(`/api/recipes`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -75,8 +75,8 @@ export const thunkAddRecipe = ({userId, name, recipe_type, instructions, descrip
       }
 } 
 
-export const thunkUpdateRecipe = ({userId, id, name, recipe_type, description, instructions}) => async (dispatch) => {
-    const res = await fetch(`/api/users/${userId}/recipes/${id}`, {
+export const thunkUpdateRecipe = ({id, name, recipe_type, description, instructions}) => async (dispatch) => {
+    const res = await fetch(`/api/recipes/${id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -104,8 +104,8 @@ export const thunkUpdateRecipe = ({userId, id, name, recipe_type, description, i
       }
 }
 
-export const thunkDeleteRecipe = (userId, recipeId) => async (dispatch) => {
-    const res = await fetch(`/api/users/${userId}/recipes/${recipeId}`, {
+export const thunkDeleteRecipe = (recipeId) => async (dispatch) => {
+    const res = await fetch(`/api/recipes/${recipeId}`, {
         method: 'DELETE'
     })
 

@@ -19,7 +19,7 @@ function RecipeDetails() {
   }, [dispatch, sessionUser])
 
   const handleDelete = async () => {
-    dispatch(thunkDeleteRecipe(sessionUser.id, id))
+    dispatch(thunkDeleteRecipe(id))
     navigate('/home')
   }
 

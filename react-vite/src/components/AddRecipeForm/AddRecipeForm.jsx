@@ -1,23 +1,31 @@
-import { Box, FormLabel, Select, TextField, MenuItem, Button, IconButton, Snackbar } from "@mui/material"
-import { useState } from "react"
+import {
+  Box,
+  FormLabel,
+  Select,
+  TextField,
+  MenuItem,
+  Button,
+  IconButton,
+  Snackbar,
+} from "@mui/material";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CloseIcon from '@mui/icons-material/Close'
+import CloseIcon from "@mui/icons-material/Close";
 import { thunkAddRecipe, thunkUpdateRecipe } from "../../redux/recipe";
 import { useModal } from "../../context/Modal";
 
-function AddRecipeForm({recipe}) {
-  const dispatch = useDispatch()
-  const sessionUser = useSelector(state => state.session.user);
-  const { closeModal } = useModal()
-  const [name, setName] = useState(recipe?.name || '');
-  const [recipeType, setRecipeType] = useState(recipe?.recipe_type || '');
-  const [instructions, setInstructions] = useState(recipe?.instructions || '')
-  const [description, setDescription] = useState(recipe?.description || '')
-  const [open, setOpen] = useState(false)
-
+function AddRecipeForm({ recipe }) {
+  const dispatch = useDispatch();
+  const sessionUser = useSelector((state) => state.session.user);
+  const { closeModal } = useModal();
+  const [name, setName] = useState(recipe?.name || "");
+  const [recipeType, setRecipeType] = useState(recipe?.recipe_type || "");
+  const [instructions, setInstructions] = useState(recipe?.instructions || "");
+  const [description, setDescription] = useState(recipe?.description || "");
+  const [open, setOpen] = useState(false);
 
   const handleClose = (reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -26,45 +34,42 @@ function AddRecipeForm({recipe}) {
 
   const action = (
     <>
-      <IconButton
-        size='small'
-        aria-label='close'
-        onClick={handleClose}
-      >
+      <IconButton size="small" aria-label="close" onClick={handleClose}>
         <CloseIcon fontSize="small" />
       </IconButton>
     </>
-  )
-
+  );
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const recipeObj = {
       userId: sessionUser.id,
       name,
       recipe_type: recipeType,
       instructions,
-      description
-    }
+      description,
+    };
 
     if (recipe) {
-      recipeObj.id = recipe.id
+      recipeObj.id = recipe.id;
     }
-    console.log(recipeObj)
+    console.log(recipeObj);
 
-    const errors = recipe ? await dispatch(thunkUpdateRecipe(recipeObj)) : await dispatch(thunkAddRecipe(recipeObj))
+    const errors = recipe
+      ? await dispatch(thunkUpdateRecipe(recipeObj))
+      : await dispatch(thunkAddRecipe(recipeObj));
     if (!errors) {
-      setOpen(true)
-      closeModal()
+      setOpen(true);
+      closeModal();
     }
-  }
+  };
 
   return (
     <Box
       component="form"
       sx={{
-        '& > :not(style)': { m: 1, width: '25ch' }
+        "& > :not(style)": { m: 1, width: "25ch" },
       }}
       onSubmit={handleSubmit}
     >
@@ -83,10 +88,19 @@ function AddRecipeForm({recipe}) {
           id="recipe-type"
           onChange={(e) => setRecipeType(e.target.value)}
         >
-        
-        {["Breakfast", "Brunch", "Lunch", "Snack", "Dinner", "Brinner", "Dessert"].map(text => (
-          <MenuItem key={text} value={text}>{text}</MenuItem>
-        ))}
+          {[
+            "Breakfast",
+            "Brunch",
+            "Lunch",
+            "Snack",
+            "Dinner",
+            "Brinner",
+            "Dessert",
+          ].map((text) => (
+            <MenuItem key={text} value={text}>
+              {text}
+            </MenuItem>
+          ))}
         </Select>
         <TextField
           id="description"
@@ -102,8 +116,10 @@ function AddRecipeForm({recipe}) {
           placeholder="How do you prepare this recipe?"
           onChange={(e) => setInstructions(e.target.value)}
         />
-        <Button type="submit" variant="outlined">{recipe ? "Update Recipe" : "Add Recipe"}</Button>
-        <Snackbar 
+        <Button type="submit" variant="outlined">
+          {recipe ? "Update Recipe" : "Add Recipe"}
+        </Button>
+        <Snackbar
           open={open}
           autoHideDuration={5000}
           onClose={handleClose}
@@ -112,7 +128,7 @@ function AddRecipeForm({recipe}) {
         />
       </Box>
     </Box>
-  )
+  );
 }
 
-export default AddRecipeForm
+export default AddRecipeForm;
