@@ -67,8 +67,8 @@ export const thunkAddMealplan = (name, date) => async (dispatch) => {
   }
 };
 
-export const deleteMealplan = (userId, mealplanId) => async (dispatch) => {
-  const res = await fetch(`/api/users/${userId}/mealplans/${mealplanId}`, {
+export const thunkDeleteMealplan = (mealplanId) => async (dispatch) => {
+  const res = await fetch(`/api/mealplans/${mealplanId}`, {
     method: "DELETE",
   });
 

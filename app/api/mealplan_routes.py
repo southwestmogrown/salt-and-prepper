@@ -30,3 +30,15 @@ def add_mealplan():
       return new_mealplan.to_dict()
 
   return {'errors': validation_errors_to_error_messages(form.errors)}, 401
+
+@mealplan_routes.route('/<int:id>', methods=["DELETE"])
+@login_required
+def delete_mealplan(id):
+   mealplan = Mealplan.query.get(id)
+   print(mealplan)
+   db.session.delete(mealplan)
+   db.session.commit()
+
+   mealplans = Mealplan.query.where(Mealplan.user_id == current_user.id)
+
+   return [mealplan.to_dict() for mealplan in mealplans]

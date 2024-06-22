@@ -3,6 +3,7 @@ import Landing from "../components/Landing";
 import Home from "../components/Home";
 import Navigation from "../components/Navigation";
 import { RecipeDetails } from "../components/Recipes";
+import { MealplanDetails } from "../components/Mealplan";
 
 export const router = createBrowserRouter([
   {
@@ -22,7 +23,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "mealplans/:id",
-        element: <h1 style={{ marginTop: "200px" }}>Mealplan</h1>,
+        element: <MealplanDetails />,
       },
     ],
   },

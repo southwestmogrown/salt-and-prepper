@@ -53,7 +53,7 @@ function SideBar() {
     setAnchor(null);
   };
 
-  const id = openRecipes ? "simple-popover" : undefined;
+  const id = openRecipes || openMealplans ? "simple-popover" : undefined;
 
   return (
     <Drawer

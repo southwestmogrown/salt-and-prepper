@@ -46,6 +46,4 @@ def recipes(id):
 @login_required
 def mealplans():
     mealplans = current_user.user_mealplans
-    plans = [mealplan.to_dict() for mealplan in mealplans]
-    print(plans)
     return [mealplan.to_dict() for mealplan in mealplans]
